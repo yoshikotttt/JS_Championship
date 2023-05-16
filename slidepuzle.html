@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スライドパズル</title>
+    <style>
+
+        .tile {
+            width: 70px;
+            height: 70px;
+            border: 1px solid rgb(227, 144, 190);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 36px;
+            background-color: #fff;
+            box-shadow: #9c9999 5px 5px;
+        }
+
+        .container {
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+        "use strict";
+
+        const tiles = [];  //index,valueの値を持った配列
+//最初にランダムなタイルを表示させる    ##########################################################
+
+        //table>tr>tdを作って、tdに配置場所の数字と、実際に表示される数字、クリック関数呼び出し
+        function init() {
+            let table = document.getElementById("table");
+
+            for (let i = 0; i < 4; i++) {
+                let tr = document.createElement("tr");
+                for (let j = 0; j < 4; j++) {
+                    let td = document.createElement("td");
+                    let index = i * 4 + j; // タイルの基本の場所
+                    td.className = "tile";
+                    td.index = index;
+                    td.value = index;
+                    td.textContent = index == 0 ? "" : index; //もしindexが０なら空文字””、それ以外はindex
+                    td.onclick = click;//td 要素のonclickプロパティにclick関数を代入
+                    tr.appendChild(td);
+                    tiles.push(td);
+                }
+                table.appendChild(tr);
+            }
+            for (let i = 0; i < 1000; i++) {
+                click({ target: { index: Math.floor(Math.random() * 16) } });
+            }
+        }
+        console.log(tiles);
+
+
+// クリックイベント    #################################################################
+
+        function click(e) {
+            let i = e.target.index; //このときのiはクリックした場所(見えている数字ではない！)
+            if (i - 4 >= 0 && tiles[i - 4].value == 0) { //i=4~15,i-4が真上
+                swap(i, i - 4); //上と変える
+            } else if (i + 4 < 16 && tiles[i + 4].value == 0) {//i=0~11,i+4で真下
+                swap(i, i + 4); //下と変える
+            } else if (i % 4 != 0 && tiles[i - 1].value == 0) {
+                swap(i, i - 1); //左と変える
+            } else if (i % 4 != 3 && tiles[i + 1].value == 0) {
+                swap(i, i + 1); //右と変える
+            }
+          
+        }
+
+        function swap(i,j){
+            let tmp = tiles[i].value;//見えてる数字０〜１５が入る可能性がある,tmpに入れる
+            console.log(tmp);
+            tiles[i].textContent= tiles[j].textContent;//iを避難させたので、iにjを重ねる
+            tiles[i].value = tiles[j].value;//
+            tiles[j].textContent = tmp;
+            tiles[j].value = tmp;
+        }
+
+
+
+
+
+    </script>
+</head>
+
+<body onload="init()">
+    <div class="container">
+    <table id="table"></table>
+    <button><a href="index.html">戻る</a></button>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style3.css">
+    <title>再び草取り</title>
+</head>
+
+<body>
+    <header>
+
+        <div>
+            <p> こんにちは <span id="uname"></span> さん<br></p>
+        </div>
+    </header>
+    <div class="group3">
+        <input type="text" id="place-input" />
+        <button id="search">地点検索</button>
+    </div>
+    <div>
+        <button id="save">今日の結果を保存</button>
+        <div id="view"></div>
+        <p>プロジェクト名の選択</p>
+        <select name="dropdown" id="dropdown"></select>
+    </div>
+    <div>
+        <input type="text" id="project" />
+        <button id="register">新規登録</button>
+        <div id="project_title"></div>
+    </div>
+    <div id="group1">
+        <button id="dot1"></button>
+        <button id="dot2"></button>
+        <button id="dot3"></button>
+    </div>
+
+    <div id="map"></div>
+  
+    <div class="group4">
+       
+        
+    </div>
+    <div id="group2">
+
+        
+        <!-- <button id="delete">削除</button> -->
+
+    </div>
+    <button><a href="index.html">戻る</a></button>
+
+    
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="firebase.js" type="module"></script>
+    <script src="env3.js"></script>
+    <script src="env2.js"></script>
+    <script>
+      
+
+
+        let map;
+        let service;
+        let infoWindow;
+
+        //mapについてデフォルトの設定
+        function initMap() {
+            //最初に表示する場所
+            const defaultLocation = new google.maps.LatLng(35.6693467, 139.702522);
+
+            infoWindow = new google.maps.InfoWindow();
+
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: defaultLocation, zoom: 18
+            });
+
+            //入力された文字をplaceに代入、placeを引数としてsearchPlace関数を呼び出し
+            $("#search").on("click", function () {
+                const place = $("#place-input").val();
+                searchPlace(place);
+            });
+        }
+
+
+
+        // let latitude =35.6693467;
+        // let longitude =139.702522;
+
+        function searchPlace(place) {
+            const request = {
+                query: place,//query=検索する場所を指定、place=引数として受け取った場所
+                fields: ["name", "geometry"],//場所の名前と場所のジオメトリ情報の指定
+            };
+
+            service = new google.maps.places.PlacesService(map);
+
+
+
+            //findPlaceFromQueryは地図の検索を行う際に使用されるGoogle Places APIの専用のメソッド
+            //指定したクエリに基づいて場所を検索し、地図上にその位置を中心として表示する役割
+            service.findPlaceFromQuery(request, function (results, status) {    //検索のためのリクエストオブジェクト
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    if (results.length > 0) {
+                        const location = results[0].geometry.location;
+                        // latitude = location.lat(); // 緯度の代入
+                        // longitude = location.lng(); // 経度の代入
+
+                        map.setCenter(location); //地図の中心を指定した位置(location)に移動するためのメソッド
+                    }
+                }
+            });
+        }
+
+        // console.log(latitude);
+        // console.log(longitude);
+
+        window.initMap = initMap;
+    </script>
+</body>
+
+</html>

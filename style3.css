@@ -1,0 +1,92 @@
+#map {
+    height: 500px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    /* ビューポートの幅が 768px 以下の場合に適用されるスタイル */
+
+    #map {
+        height: 600px;
+        width: 100%;
+    }
+
+
+
+
+
+  }
+  
+  @media (min-width: 1200px) {
+    /* ビューポートの幅が 1200px 以上の場合に適用されるスタイル */
+  }
+
+  header {
+    height: 90px;
+    background-color: #f9cc96;
+    display: flex;
+    justify-content: flex-end;
+   
+  
+  }
+
+  header p {
+    text-align: right;
+  }
+
+  button {
+    display: block;
+  }
+  
+#group1 {
+    display: flex;
+    justify-content: center;
+}
+
+#dot1  {
+    width: 30px;
+    height: 30px;
+    background-image: url(./img/dot1.png);
+    background-size:cover ;
+    background-repeat: no-repeat;
+    border: none;
+    margin-right: 30px;
+}
+  
+
+  
+#dot2  {
+    width: 30px;
+    height: 30px;
+    background-image: url(./img/dot2.png);
+    background-size:cover ;
+    background-repeat: no-repeat;
+    border: none;
+    margin-right: 30px;
+}
+#dot3  {
+    width: 30px;
+    height: 30px;
+    background-image: url(./img/dot3.png);
+    background-size:cover ;
+    background-repeat: no-repeat;
+    border: none;
+}
+  
+.group3 {
+    display: flex;
+    background-color: #b3dfeb;
+    align-items: center;
+   
+}
+
+.group4 {
+    display: flex;
+    background-color: #b3ebb7;
+    align-items: center;
+   
+}
+
+
+
+    
