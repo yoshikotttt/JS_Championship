@@ -1,6 +1,14 @@
 #map {
-    height: 500px;
-    width: 100%;
+    height: 600px;
+    width: 90%;
+    border-radius: 10px;
+}
+
+body {
+  background-image: url(./img/bgi2.png);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -23,7 +31,7 @@
 
   header {
     height: 90px;
-    background-color: #f9cc96;
+  
     display: flex;
     justify-content: flex-end;
    
