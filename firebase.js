@@ -26,6 +26,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChang
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "kstr");
+const database = db;
 // const titlesRef = ref(dbRef, "titles");
 // const titlesRef = ref(dbRef.child("titles"));
 const titlesRef = child(dbRef, "titles");
@@ -102,10 +103,9 @@ function addMarker(location, selectedMarkerImage) {  //マーカーを任意の�
         marker: marker,
 
     };
-    markerDataArray.push(markerData);
-    projectData.markers.push(markerData);
+    // markerDataArray.push(markerData);
+    projectData.markers.push({[title]:markerData});
 
-    saveMarkerData(markerData);
  
 
 }
@@ -150,14 +150,10 @@ $("#project_select").on("change", function () {
 function displayMarkers() {
     if (selectedProjectTitle) {
         const markersRef = child(ref(database), `projects/${selectedProjectTitle}/markers`);
-        get(markersRef)
-            .then((snapshot) => {
+        onValue(markersRef,(snapshot) => {
                 const markerData = snapshot.val();
                 console.log("マーカーデータ:", markerData);
-
-
-            })
-            .catch((error) => {
+            },(error) => {
                 console.error("マーカーデータの取得中にエラーが発生しました:", error);
 
             });
