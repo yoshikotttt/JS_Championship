@@ -35,15 +35,8 @@ const titlesRef = child(dbRef, "titles");
 
 //ボタンの選択と画像の紐付け
 let selectedMarkerImage = "./img/dot1.png";
-let titleKey;
 
 
-// function addTitle(title) {
-//     const titleRef = push(titlesRef);
-//     const titleData = { title: title, key: titleRef.key }; // タイトルとキーのオブジェクトを作成
-//     set(titleRef, titleData); // Firebaseにセット
-//     return titleRef.key;
-// }
 
 
 $("#dot1").on("click", function () {
@@ -58,6 +51,10 @@ $("#dot3").on("click", function () {
     selectedMarkerImage = "./img/dot3.png"
 });
 
+let projectData = {};
+let selectedProjectTitle = "";
+
+
 //タイトルの保存
 $("#register").on("click", function () {
     const projectInput = $("#project");
@@ -66,11 +63,27 @@ $("#register").on("click", function () {
     $("#project_title").text(title);
     projectInput.val("");
 
+    projectData = {
+        title: title,
+        markers: []
+    };
+
+    set(child(titlesRef, title), true)
+        .then(() => {
+            console.log("タイトルを保存しました");
+            const projectSelect = $("#project_select");
+            const option = $("<option></option>").text(title);
+            projectSelect.append(option);
+        })
+        .catch((error) => {
+            console.error("タイトルの保存中にエラーが発生しました:", error);
+        });
 });
 
 let marker;
 let markerDataArray = [];
 let clickedLocation;
+
 
 
 
@@ -87,9 +100,30 @@ function addMarker(location, selectedMarkerImage) {  //マーカーを任意の�
         timestamp: new Date().toISOString(),
         markerImage: selectedMarkerImage,
         marker: marker,
-        // clickable:false
+
     };
     markerDataArray.push(markerData);
+    projectData.markers.push(markerData);
+
+    saveMarkerData(markerData);
+ 
+
+}
+
+function saveMarkerData(markerData) {
+    if (selectedProjectTitle) {
+        const markersRef = child(ref(database),`projects/${selectedProjectTitle}/markers`);
+        const newMarkerRef = push(markersRef);
+        set(newMarkerRef,markerData)
+        .then(() =>{
+            console.log("マーカーデータを保存しました");
+        })
+        .catch((error) => {
+            console.error("マーカーの保存中にエラーが発生しました:", error);
+        });
+
+    }
+    return Promise.reject("selectedProjectTitleが設定されていません");
 }
 
 map.addListener("click", function (e) {         //地図上をクリックしたときの処理（マーカー表示関数を使用）
@@ -103,9 +137,35 @@ map.addListener("click", function (e) {         //地図上をクリックした
     console.log(new Date().toISOString())
     console.log(selectedMarkerImage);
 
-
-
 });
+
+$("#project_select").on("change", function () {
+    selectedProjectTitle = $(this).val();
+    console.log("選択されたプロジェクトタイトル:", selectedProjectTitle);
+    displayMarkers();
+})
+
+
+
+function displayMarkers() {
+    if (selectedProjectTitle) {
+        const markersRef = child(ref(database), `projects/${selectedProjectTitle}/markers`);
+        get(markersRef)
+            .then((snapshot) => {
+                const markerData = snapshot.val();
+                console.log("マーカーデータ:", markerData);
+
+
+            })
+            .catch((error) => {
+                console.error("マーカーデータの取得中にエラーが発生しました:", error);
+
+            });
+    } else {
+        console.log("プロジェクトタイトルが選択されていません");
+    }
+
+}
 
 
 
@@ -115,7 +175,7 @@ $("#save").on("click", function () {
 
 
 
-        markerDataArray = [];
+    markerDataArray = [];
 
 });
 
