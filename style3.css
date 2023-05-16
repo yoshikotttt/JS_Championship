@@ -11,6 +11,8 @@ body {
   flex-direction: column;
 }
 
+
+
 @media (max-width: 768px) {
     /* ビューポートの幅が 768px 以下の場合に適用されるスタイル */
 
