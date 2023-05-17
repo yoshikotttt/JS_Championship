@@ -66,7 +66,7 @@ $("#register").on("click", function () {
 
     projectData = {
         title: title,
-        markers: []
+        // markers: []
     };
 
     set(child(titlesRef, title), true)
@@ -81,99 +81,118 @@ $("#register").on("click", function () {
         });
 });
 
-let marker;
-let markerDataArray = [];
-let clickedLocation;
+
+//データを持ってくる、データの長さをとります、長さ分forする、for文の title=変数=i
+
+// const titles =farebaseのタイトル配列titles[title0,title1]
+
+ for(let i=0;i<title.length;i++){
+
+    const option = $("<option></option>").text(title[i]);
+            projectSelect.append(option);
+ }
+
+
+
+// onChildAdded(dbRef, function (data) {
+//     const msg = data.val();
+//     displayChatMessage(msg);
+// });
+
+
+// let marker;
+// let markerDataArray = [];
+// let clickedLocation;
 
 
 
 
-function addMarker(location, selectedMarkerImage) {  //マーカーを任意の場所に表示させる関数
-    marker = new google.maps.Marker({
-        position: location,
-        map: map, //マーカーを表示する地図オブジェクト
-        icon: selectedMarkerImage,
-    });
+// function addMarker(location, selectedMarkerImage) {  //マーカーを任意の場所に表示させる関数
+//     marker = new google.maps.Marker({
+//         position: location,
+//         map: map, //マーカーを表示する地図オブジェクト
+//         icon: selectedMarkerImage,
+//     });
 
 
-    const markerData = {
-        location: { lat: clickedLocation.lat(), lng: clickedLocation.lng() },
-        timestamp: new Date().toISOString(),
-        markerImage: selectedMarkerImage,
-        marker: marker,
+//     const markerData = {
+//         location: { lat: clickedLocation.lat(), lng: clickedLocation.lng() },
+//         timestamp: new Date().toISOString(),
+//         markerImage: selectedMarkerImage,
+//         marker: marker,
 
-    };
-    // markerDataArray.push(markerData);
-    projectData.markers.push({[title]:markerData});
+//     };
+//     // markerDataArray.push(markerData);
+//     projectData.markers.push({[title]:markerData});
 
  
 
-}
+// }
 
-function saveMarkerData(markerData) {
-    if (selectedProjectTitle) {
-        const markersRef = child(ref(database),`projects/${selectedProjectTitle}/markers`);
-        const newMarkerRef = push(markersRef);
-        set(newMarkerRef,markerData)
-        .then(() =>{
-            console.log("マーカーデータを保存しました");
-        })
-        .catch((error) => {
-            console.error("マーカーの保存中にエラーが発生しました:", error);
-        });
+// function saveMarkerData(markerData) {
+//     if (selectedProjectTitle) {
+//         const markersRef = child(ref(database),`projects/${selectedProjectTitle}/markers`);
+//         const newMarkerRef = push(markersRef);
+//         set(newMarkerRef,markerData)
+//         .then(() =>{
+//             console.log("マーカーデータを保存しました");
+//         })
+//         .catch((error) => {
+//             console.error("マーカーの保存中にエラーが発生しました:", error);
+//         });
 
-    }
-    return Promise.reject("selectedProjectTitleが設定されていません");
-}
+//     }
+//     return Promise.reject("selectedProjectTitleが設定されていません");
+// }
 
-map.addListener("click", function (e) {         //地図上をクリックしたときの処理（マーカー表示関数を使用）
+// map.addListener("click", function (e) {         //地図上をクリックしたときの処理（マーカー表示関数を使用）
 
-    clickedLocation = e.latLng;
+//     clickedLocation = e.latLng;
 
-    addMarker(clickedLocation, selectedMarkerImage);
+//     addMarker(clickedLocation, selectedMarkerImage);
 
-    console.log(clickedLocation.lat());
-    console.log(clickedLocation.lng());
-    console.log(new Date().toISOString())
-    console.log(selectedMarkerImage);
+//     console.log(clickedLocation.lat());
+//     console.log(clickedLocation.lng());
+//     console.log(new Date().toISOString())
+//     console.log(selectedMarkerImage);
 
-});
+// });
 
 $("#project_select").on("change", function () {
     selectedProjectTitle = $(this).val();
     console.log("選択されたプロジェクトタイトル:", selectedProjectTitle);
-    displayMarkers();
+    // displayMarkers();
 })
 
 
 
-function displayMarkers() {
-    if (selectedProjectTitle) {
-        const markersRef = child(ref(database), `projects/${selectedProjectTitle}/markers`);
-        onValue(markersRef,(snapshot) => {
-                const markerData = snapshot.val();
-                console.log("マーカーデータ:", markerData);
-            },(error) => {
-                console.error("マーカーデータの取得中にエラーが発生しました:", error);
+// function displayMarkers() {
+//     if (selectedProjectTitle) {
+//         const markersRef = child(ref(database), `projects/${selectedProjectTitle}/markers`);
+//         onValue(markersRef,(snapshot) => {
+//                 const markerData = snapshot.val();
+//                 console.log("マーカーデータ:", markerData);
+//             },(error) => {
+//                 console.error("マーカーデータの取得中にエラーが発生しました:", error);
 
-            });
-    } else {
-        console.log("プロジェクトタイトルが選択されていません");
-    }
+//             });
+//     } else {
+//         console.log("プロジェクトタイトルが選択されていません");
+//     }
 
-}
-
-
-
-
-$("#save").on("click", function () {
-    const projectTitle = $("#project_title").text;
+// }
 
 
 
-    markerDataArray = [];
 
-});
+// $("#save").on("click", function () {
+//     const projectTitle = $("#project_title").text;
+
+
+
+//     markerDataArray = [];
+
+// });
 
 
 
